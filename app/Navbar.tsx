@@ -1,8 +1,13 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { SiInternetcomputer } from "react-icons/si";
+import classNames from "classnames";
 
 const Navbar = () => {
+  const currentPath = usePathname();
+
   const links = [
     { label: "Dashboard", link: "/" },
     { label: "Projects", link: "/projects" },
@@ -19,7 +24,11 @@ const Navbar = () => {
           <li>
             <Link
               key={link.link}
-              className="text-zinc-500 hover:text-zinc-800 transition-colors"
+              className={classNames({
+                "text-zinc-900": link.link === currentPath,
+                "text-zinc-500": link.link !== currentPath,
+                "hover:text-zinc-800 transition-colors": true,
+              })}
               href={link.link}
             >
               {link.label}
