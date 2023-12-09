@@ -21,9 +21,8 @@ const Navbar = () => {
       </Link>
       <ul className="flex space-x-6">
         {links.map((link) => (
-          <li>
+          <li key={link.link}>
             <Link
-              key={link.link}
               className={classNames({
                 "text-zinc-900": link.link === currentPath,
                 "text-zinc-500": link.link !== currentPath,
