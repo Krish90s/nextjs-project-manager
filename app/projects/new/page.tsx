@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type ProjectForm = z.infer<typeof createProjectSchema>;
 
@@ -22,14 +23,18 @@ const NewProjectPage = () => {
   } = useForm<ProjectForm>({ resolver: zodResolver(createProjectSchema) });
   const router = useRouter();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit: SubmitHandler<ProjectForm> = async (body) => {
     try {
+      setIsSubmitting(true);
       const { data } = await axios.post("/api/projects", body);
       console.log(data);
       router.push("/projects");
     } catch (error) {
       setError("An unexpected error occured.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -55,7 +60,9 @@ const NewProjectPage = () => {
         {errors.description && (
           <ErrorMessage>{errors.description?.message}</ErrorMessage>
         )}
-        <Button>Create Project</Button>
+        <Button disabled={isSubmitting}>
+          Create Project {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
