@@ -1,16 +1,17 @@
 "use client";
-import { Button, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createProjectSchema } from "@/app/validationSchema";
+import { z } from "zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
-interface ProjectForm {
-  title: string;
-  description: string;
-}
+type ProjectForm = z.infer<typeof createProjectSchema>;
 
 const NewProjectPage = () => {
   const {
@@ -18,23 +19,32 @@ const NewProjectPage = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<ProjectForm>();
+  } = useForm<ProjectForm>({ resolver: zodResolver(createProjectSchema) });
   const router = useRouter();
+  const [error, setError] = useState("");
 
   const onSubmit: SubmitHandler<ProjectForm> = async (body) => {
     try {
       const { data } = await axios.post("/api/projects", body);
       console.log(data);
       router.push("/projects");
-    } catch (error) {}
+    } catch (error) {
+      setError("An unexpected error occured.");
+    }
   };
 
   return (
     <div className="max-w-xl">
+      {error && (
+        <Callout.Root color="red" className="mb-5">
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
       <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
         <TextField.Root>
           <TextField.Input placeholder="Title" {...register("title")} />
         </TextField.Root>
+        {errors.title && <ErrorMessage>{errors.title?.message}</ErrorMessage>}
         <Controller
           name="description"
           control={control}
@@ -42,7 +52,10 @@ const NewProjectPage = () => {
             <SimpleMDE placeholder="Description" {...field} />
           )}
         />
-        <Button type="submit">Create Project</Button>
+        {errors.description && (
+          <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        )}
+        <Button>Create Project</Button>
       </form>
     </div>
   );
