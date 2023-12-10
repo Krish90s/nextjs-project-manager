@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import StatusBadge from "@/app/components/StatusBadge";
 import Markdown from "react-markdown";
+import delay from "delay";
 
 interface Props {
   params: { id: string };
@@ -13,6 +14,8 @@ const ProjectDetailsPage = async ({ params }: Props) => {
   const project = await prisma.project.findUnique({ where: { id: params.id } });
 
   if (!project) notFound();
+
+  await delay(2000);
 
   return (
     <div>
