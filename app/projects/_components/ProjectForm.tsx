@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createProjectSchema } from "@/app/validationSchema";
+import { projectSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import { ErrorMessage, Spinner } from "@/app/components";
 import { Project } from "@prisma/client";
@@ -16,7 +16,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
-type ProjectFormData = z.infer<typeof createProjectSchema>;
+type ProjectFormData = z.infer<typeof projectSchema>;
 
 interface Props {
   project?: Project;
@@ -28,7 +28,7 @@ const ProjectForm = ({ project }: { project?: Project }) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<ProjectFormData>({ resolver: zodResolver(createProjectSchema) });
+  } = useForm<ProjectFormData>({ resolver: zodResolver(projectSchema) });
 
   const router = useRouter();
   const [error, setError] = useState("");
@@ -37,8 +37,9 @@ const ProjectForm = ({ project }: { project?: Project }) => {
   const onSubmit: SubmitHandler<ProjectFormData> = async (body) => {
     try {
       setIsSubmitting(true);
-      const { data } = await axios.post("/api/projects", body);
-      console.log(data);
+      if (project) await axios.patch(`/api/projects/` + project.id, body);
+      else await axios.post(`/api/projects`, body);
+
       router.push("/projects");
     } catch (error) {
       setError("An unexpected error occured.");
@@ -75,7 +76,8 @@ const ProjectForm = ({ project }: { project?: Project }) => {
           <ErrorMessage>{errors.description?.message}</ErrorMessage>
         )}
         <Button disabled={isSubmitting}>
-          Create Project {isSubmitting && <Spinner />}
+          {project ? "Update Project" : "Create Project"}{" "}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>

@@ -15,7 +15,7 @@ export async function PATCH(
   const project = await prisma.project.findUnique({ where: { id: params.id } });
 
   if (!project)
-    return NextResponse.json("project dosent exist", { status: 404 });
+    return NextResponse.json({ error: "Invalid Project" }, { status: 400 });
 
   const updatedProject = await prisma.project.update({
     where: { id: params.id },
