@@ -58,6 +58,22 @@ const DeleteProjectButton = ({ issueId }: { issueId: string }) => {
           </div>
         </AlertDialog.Content>
       </AlertDialog.Root>
+
+      {/* error for alert */}
+
+      <AlertDialog.Root open={error === "" ? false : true}>
+        <AlertDialog.Content className="AlertDialogContent">
+          <AlertDialog.Title className="AlertDialogTitle">
+            Error
+          </AlertDialog.Title>
+          <AlertDialog.Description className="AlertDialogDescription">
+            {error}
+          </AlertDialog.Description>
+          <Button variant="soft" color="gray" onClick={() => setError("")}>
+            Ok
+          </Button>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
     </>
   );
 };
