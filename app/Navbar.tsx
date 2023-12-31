@@ -10,8 +10,8 @@ const Navbar = () => {
 
   const links = [
     { label: "Dashboard", link: "/" },
-    { label: "Projects", link: "/projects" },
-    // { label: "Admin Panel", link: "/admin" },
+    { label: "Projects", link: "/projects/list" },
+    { label: "Admin Panel", link: "/admin" },
   ];
 
   return (

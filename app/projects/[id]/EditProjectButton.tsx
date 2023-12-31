@@ -7,7 +7,7 @@ const EditProjectButton = ({ issueId }: { issueId: String }) => {
   return (
     <Button>
       <Pencil2Icon />
-      <Link href={`/projects/${issueId}/edit`}>Edit Project</Link>
+      <Link href={`/projects/edit/${issueId}`}>Edit Project</Link>
     </Button>
   );
 };

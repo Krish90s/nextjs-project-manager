@@ -19,7 +19,7 @@ const DeleteProjectButton = ({ issueId }: { issueId: string }) => {
     try {
       setIsSubmitting(true);
       await axios.delete(`/api/projects/${issueId}`);
-      router.push("/projects");
+      router.push("/projects/list");
       router.refresh();
     } catch (error) {
       setError("An unexpected error occured.");

@@ -36,7 +36,7 @@ const ProjectForm = ({ project }: { project?: Project }) => {
       if (project) await axios.patch(`/api/projects/` + project.id, body);
       else await axios.post(`/api/projects`, body);
 
-      router.push("/projects");
+      router.push("/projects/list");
       router.refresh();
     } catch (error) {
       setError("An unexpected error occured.");
