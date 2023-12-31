@@ -41,6 +41,7 @@ const ProjectForm = ({ project }: { project?: Project }) => {
       else await axios.post(`/api/projects`, body);
 
       router.push("/projects");
+      router.refresh();
     } catch (error) {
       setError("An unexpected error occured.");
     } finally {
