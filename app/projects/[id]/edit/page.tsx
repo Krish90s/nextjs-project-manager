@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import React from "react";
 import prisma from "@/prisma/client";
-import ProjectForm from "../../_components/ProjectForm";
+import dynamic from "next/dynamic";
+
+const ProjectForm = dynamic(
+  () => import("@/app/projects/_components/ProjectForm"),
+  { ssr: false, loading: () => <p>Loading...</p> }
+);
 
 interface Props {
   params: { id: string };

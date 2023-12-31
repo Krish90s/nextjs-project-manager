@@ -1,20 +1,16 @@
 "use client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
-import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import React, { useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { projectSchema } from "@/app/validationSchema";
-import { z } from "zod";
 import { ErrorMessage, Spinner } from "@/app/components";
+import { projectSchema } from "@/app/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Project } from "@prisma/client";
-
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
+import { Button, Callout, TextField } from "@radix-ui/themes";
+import axios from "axios";
+import "easymde/dist/easymde.min.css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import SimpleMdeReact from "react-simplemde-editor";
+import { z } from "zod";
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
@@ -70,7 +66,7 @@ const ProjectForm = ({ project }: { project?: Project }) => {
           control={control}
           defaultValue={project?.description}
           render={({ field }) => (
-            <SimpleMDE placeholder="Description" {...field} />
+            <SimpleMdeReact placeholder="Description" {...field} />
           )}
         />
         {errors.description && (
