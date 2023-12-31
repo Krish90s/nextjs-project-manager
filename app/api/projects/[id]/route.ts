@@ -24,3 +24,19 @@ export async function PATCH(
 
   return NextResponse.json(updatedProject, { status: 201 });
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const project = await prisma.project.findUnique({ where: { id: params.id } });
+
+  if (!project)
+    return NextResponse.json({ error: "Invalid Project" }, { status: 400 });
+
+  await prisma.project.delete({
+    where: { id: params.id },
+  });
+
+  return NextResponse.json({});
+}

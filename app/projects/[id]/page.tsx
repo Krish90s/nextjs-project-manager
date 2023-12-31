@@ -20,7 +20,7 @@ const ProjectDetailsPage = async ({ params }: Props) => {
         <ProjectDetails project={project} />
       </Box>
       <Box>
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="1">
           <EditProjectButton issueId={project.id} />
           <DeleteProjectButton issueId={project.id} />
         </Flex>
