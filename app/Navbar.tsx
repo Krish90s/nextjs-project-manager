@@ -65,12 +65,13 @@ const AuthStatus = () => {
 
   if (status === "loading") return null;
 
-  if (status === "unauthenticated")
-    () => (
-      <Link className="nav-link" href="api/auth/signin">
+  if (status === "unauthenticated") {
+    return (
+      <Link className="nav-link" href="/api/auth/signin">
         Login
       </Link>
     );
+  }
 
   return (
     <Box>
@@ -78,7 +79,7 @@ const AuthStatus = () => {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Avatar
-              src={session.user!.image!}
+              src={session!.user!.image!}
               fallback="?"
               size="2"
               radius="full"
@@ -88,10 +89,10 @@ const AuthStatus = () => {
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.Label>
-              <Text size="2">{session.user!.email}</Text>
+              <Text size="2">{session!.user!.email}</Text>
             </DropdownMenu.Label>
             <DropdownMenu.Item>
-              <Link href="api/auth/signout">Sign Out</Link>
+              <Link href="/api/auth/signout">Sign Out</Link>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
