@@ -4,12 +4,16 @@ import { notFound } from "next/navigation";
 import EditProjectButton from "./EditProjectButton";
 import ProjectDetails from "./ProjectDetails";
 import DeleteProjectButton from "./DeleteProjectButton";
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
+import { getServerSession } from "next-auth";
 
 interface Props {
   params: { id: string };
 }
 
 const ProjectDetailsPage = async ({ params }: Props) => {
+  const session = await getServerSession(authOptions);
+
   const project = await prisma.project.findUnique({ where: { id: params.id } });
 
   if (!project) notFound();
@@ -19,12 +23,14 @@ const ProjectDetailsPage = async ({ params }: Props) => {
       <Box className="md:col-span-4">
         <ProjectDetails project={project} />
       </Box>
-      <Box>
-        <Flex direction="column" gap="1">
-          <EditProjectButton issueId={project.id} />
-          <DeleteProjectButton issueId={project.id} />
-        </Flex>
-      </Box>
+      {session && (
+        <Box>
+          <Flex direction="column" gap="1">
+            <EditProjectButton issueId={project.id} />
+            <DeleteProjectButton issueId={project.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 };
