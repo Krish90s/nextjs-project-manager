@@ -4,6 +4,24 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import authOptions from "../../auth/[...nextauth]/authOptions";
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  // const session = await getServerSession(authOptions);
+  // if (!session) return NextResponse.json({}, { status: 401 });
+
+  const project = await prisma.project.findUnique({
+    where: { id: params.id },
+    include: { members: true },
+  });
+
+  if (!project)
+    return NextResponse.json({ error: "Invalid Project" }, { status: 400 });
+
+  return NextResponse.json(project, { status: 201 });
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }

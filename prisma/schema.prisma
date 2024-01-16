@@ -25,7 +25,7 @@ model Project {
 
 model Member {
   id        String   @id @default(cuid())
-  role      String
+  role      Roles    @default(DEVELOPER)
   user      User     @relation(fields: [userId], references: [id])
   project   Project  @relation(fields: [projectId], references: [id])
   userId    String
@@ -66,6 +66,15 @@ enum Status {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+enum Roles {
+  ADMIN
+  OWNER
+  DEVELOPER
+  TESTER
+  USER
+  MANAGER
 }
 
 model Account {
